@@ -22,3 +22,5 @@ Unfinished:
 2) Unzip the downloaded file
 3) Navigate (`cd`) to the directory where the folder "escb1" and "README.md" are visible (**Do not go into the "escb1" directory**)
 4) Run the ESCB1.class file through the escb1 directory: `java escb1.ESCB1`
+### Alternative Method
+1) After unzipping the file, run the executable .jar file: `java -jar ExtremelySimpleChessBoard.jar`
