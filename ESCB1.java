@@ -662,6 +662,10 @@ public class ESCB1 {
                         illegal = true;
                     }
                 }
+                /*
+                 * Checks for checkmate, stalemate, and draw by insufficient
+                 * material
+                 */
                 if (newBoard.checkmateOrStalemate(oppositeColor, true,
                         lastMove)) {
                     System.out
