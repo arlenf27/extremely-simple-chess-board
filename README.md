@@ -18,5 +18,7 @@ Unfinished:
 6) If an invalid input was given, then the program will prompt for the input again
 7) It is completely UNNECESSARY to include '+' or '#' as part of a move for checks or checkmates; however, if one chooses to include either character, then the move MUST be either a check or a checkmate
 ## Running the Program
-1) Check that a recent version of JDK is installed (Recommended Minimum Version: JDK 17.0.7)
-2) Run the ESCB1.class file: `java ESCB1`
+1) Check that a recent version of JDK is installed (Recommended Minimum Version: JDK 17.0.7): `java -version`
+2) Unzip the downloaded file
+3) Navigate (`cd`) to the directory where the folder "escb1" and "README.md" are visible (**Do not go into the "escb1" directory**)
+4) Run the ESCB1.class file through the escb1 directory: `java escb1.ESCB1`
