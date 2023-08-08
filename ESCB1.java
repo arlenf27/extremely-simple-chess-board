@@ -685,9 +685,10 @@ public class ESCB1 {
                             + ", Board: \n\n" + newBoard.toStringTable());
                     System.exit(0);
                 }
-                System.out.println("Current State: Move: " + newBoard.getMove()
-                        + ", Board: \n\n" + newBoard.toStringTable());
                 if (!illegal) {
+                    System.out.println("Current State: Move: "
+                            + newBoard.getMove() + ", Board: \n\n"
+                            + newBoard.toStringTable());
                     count++;
                     lastMove = s;
                 }
