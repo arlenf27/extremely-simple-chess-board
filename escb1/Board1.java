@@ -478,7 +478,7 @@ public class Board1 implements Board {
                     }
                 }
             }
-            this.piecesMoved = temp - 1;
+            this.piecesMoved = temp;
             return true;
         }
         return false;

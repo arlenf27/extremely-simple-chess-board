@@ -670,18 +670,21 @@ public class ESCB1 {
                         lastMove)) {
                     System.out
                             .println("Checkmate, " + currentColor + " wins. ");
-                    System.out.println("Move: " + newBoard.getMove()
+                    System.out.println("Move: "
+                            + ((newBoard.getPiecesMoved() - 1) / 2 + 1)
                             + ", Board: \n\n" + newBoard.toStringTable());
                     System.exit(0);
                 } else if (newBoard.checkmateOrStalemate(oppositeColor, false,
                         lastMove)) {
                     System.out.println("Stalemate, Draw. ");
-                    System.out.println("Move: " + newBoard.getMove()
+                    System.out.println("Move: "
+                            + ((newBoard.getPiecesMoved() - 1) / 2 + 1)
                             + ", Board: \n\n" + newBoard.toStringTable());
                     System.exit(0);
                 } else if (newBoard.insufficientMaterialDraw()) {
                     System.out.println("Insufficient Material, Draw. ");
-                    System.out.println("Move: " + newBoard.getMove()
+                    System.out.println("Move: "
+                            + ((newBoard.getPiecesMoved() - 1) / 2 + 1)
                             + ", Board: \n\n" + newBoard.toStringTable());
                     System.exit(0);
                 }
