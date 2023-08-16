@@ -3,6 +3,7 @@ package escb1;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -459,7 +460,7 @@ public class ESCB1 {
          */
         Board newBoard = new Board1();
         System.out.println(
-                "An extremely simple chess board that takes input in the form of Standard Algebraic Notation (SAN). It is important to note that \n\t1) This program does not accept the letter 'P' as an initial for pawn moves; in these cases, the 'P' is ommitted\n\t2) This program does not accept 'e.p' as part of an annotation; it will auto-recognize the validity of en passant moves\n\t3) This program does not allow the presence of additional annotations on the quality of moves (such as '!' or '!!' or '?!')\n\t4) The symbol '#' is used for checkmates instead of '++'\n\t5) Unfortunately, I am not completely familiar with SAN; I have tried my best to make sure all possible inputs are accounted for, but I could have misunderstood a few things about the notation\n\t6) If an invalid input was given, then the program will prompt for the input again\n\t7) It is completely UNNECESSARY to include '+' or '#' as part of a move for checks or checkmates; however, if one chooses to include either character, then the move MUST be either a check or a checkmate\n\t8) The 50-move Rule is not yet implemented\n\t9) Draw by Repitition is not yet implemented\n\t10) Draw by Agreement is not yet implemented\n\t11) Resignation is not yet implemented");
+                "An extremely simple chess board that takes input in the form of Standard Algebraic Notation (SAN). It is important to note that \n\t1) This program does not accept the letter 'P' as an initial for pawn moves; in these cases, the 'P' is ommitted\n\t2) This program does not accept 'e.p' as part of an annotation; it will auto-recognize the validity of en passant moves\n\t3) This program does not allow the presence of additional annotations on the quality of moves (such as '!' or '!!' or '?!')\n\t4) The symbol '#' is used for checkmates instead of '++'\n\t5) Unfortunately, I am not completely familiar with SAN; I have tried my best to make sure all possible inputs are accounted for, but I could have misunderstood a few things about the notation\n\t6) If an invalid input was given, then the program will prompt for the input again\n\t7) It is completely UNNECESSARY to include '+' or '#' as part of a move for checks or checkmates; however, if one chooses to include either character, then the move MUST be either a check or a checkmate\n\t8) Draw by Repitition is not yet implemented\n\t9) Draw by Agreement is not yet implemented\n\t10) Resignation is not yet implemented");
         System.out.println("Initial State: Move: " + newBoard.getMove()
                 + ", Board: \n\n" + newBoard.toStringTable());
         /*
@@ -467,6 +468,7 @@ public class ESCB1 {
          */
         int count = 0;
         String lastMove = "";
+        ArrayList<String> allMoves = new ArrayList<String>();
         /*
          * Takes user input (only accepts Algebraic Notation).
          */
@@ -688,12 +690,34 @@ public class ESCB1 {
                             + ", Board: \n\n" + newBoard.toStringTable());
                     System.exit(0);
                 }
+                boolean fiftyMoveRule = true;
+                if (allMoves.size() >= 99 && !s.contains("x")
+                        && !(s.charAt(0) >= 97 && s.charAt(0) <= 104)) {
+                    for (int i = 0; i < 99; i++) {
+                        if (allMoves.get(i).contains("x")
+                                || (allMoves.get(i).charAt(0) >= 97
+                                        && allMoves.get(i).charAt(0) <= 104)) {
+                            fiftyMoveRule = false;
+                            break;
+                        }
+                    }
+                } else {
+                    fiftyMoveRule = false;
+                }
+                if (fiftyMoveRule) {
+                    System.out.println("50-Move Rule, Draw. ");
+                    System.out.println("Move: "
+                            + ((newBoard.getPiecesMoved() - 1) / 2 + 1)
+                            + ", Board: \n\n" + newBoard.toStringTable());
+                    System.exit(0);
+                }
                 if (!illegal) {
                     System.out.println("Current State: Move: "
                             + newBoard.getMove() + ", Board: \n\n"
                             + newBoard.toStringTable());
                     count++;
                     lastMove = s;
+                    allMoves.add(0, s);
                 }
             } catch (IndexOutOfBoundsException e) {
                 if (listOfErrors.size() == 0) {

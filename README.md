@@ -4,10 +4,10 @@
  - To run the program, ***run ESCB1.class through a command prompt***, detailed instructions below
  - Takes input in the form of SAN (Standard Algebraic Notation) and makes the appropriate move on the board; prints the appropriate error message in the case of an invalid input
 ## Status
-Unfinished: 
- - Not thoroughly tested yet, may contain errors
+In Development: 
+ - Not completely tested yet, may contain errors
  - Draw by agreement not implemented
- - Draw by 50-move rule not implemented
+ - Draw by repetition not implemented
  - Resignation not implemented
 ## Operation Notes
 1) This program does not accept the letter 'P' as an initial for pawn moves; in these cases, the 'P' is ommitted
