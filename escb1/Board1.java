@@ -96,6 +96,8 @@ public class Board1 implements Board {
     @Override
     public Piece updateState(Position pos1, Position pos2, Piece.Color color,
             boolean ignoreKingInCheck) throws KingInCheckException {
+        int originalTimesMoved = this.board[pos1.getRow()][pos1.getColumn()]
+                .getTimesMoved();
         Piece newPiece = new Piece1(
                 this.board[pos1.getRow()][pos1.getColumn()].getColor(),
                 this.board[pos1.getRow()][pos1.getColumn()].getType(), pos2);
@@ -122,6 +124,7 @@ public class Board1 implements Board {
              */
             Piece formerPiece = new Piece1(newPiece.getColor(),
                     newPiece.getType(), pos1);
+            formerPiece.setTimesMoved(originalTimesMoved);
             this.board[pos1.getRow()][pos1.getColumn()] = formerPiece;
             this.board[pos2.getRow()][pos2.getColumn()] = pieceReplaced;
             this.piecesMoved--;
@@ -500,8 +503,12 @@ public class Board1 implements Board {
     private boolean moveFails(Position pos1, Position pos2, Color color,
             int temp) {
         try {
+            int originalTimesMoved = this.board[pos1.getRow()][pos1.getColumn()]
+                    .getTimesMoved();
             Piece pieceTaken = this.updateState(pos1, pos2, color, false);
             this.updateState(pos2, pos1, color, true);
+            this.board[pos1.getRow()][pos1.getColumn()]
+                    .setTimesMoved(originalTimesMoved);
             if (pieceTaken != null) {
                 this.board[pos2.getRow()][pos2.getColumn()] = pieceTaken;
             }
@@ -527,8 +534,12 @@ public class Board1 implements Board {
     private boolean enpassantFails(Position pos1, Position pos2, Color color,
             int temp) {
         try {
+            int originalTimesMoved = this.board[pos1.getRow()][pos1.getColumn()]
+                    .getTimesMoved();
             Piece pieceTaken = this.enpassant(pos1, pos2, color, false);
             this.updateState(pos2, pos1, color, true);
+            this.board[pos1.getRow()][pos1.getColumn()]
+                    .setTimesMoved(originalTimesMoved);
             int backwards = 1;
             if (color == Piece.Color.BLACK) {
                 backwards = -1;
@@ -547,6 +558,8 @@ public class Board1 implements Board {
     @Override
     public Piece promote(Position pos1, Position pos2, Type type, Color color)
             throws KingInCheckException {
+        int originalTimesMoved = this.board[pos1.getRow()][pos1.getColumn()]
+                .getTimesMoved();
         Piece newPiece = new Piece1(color, type, pos2);
         newPiece.setTimesMoved(
                 this.board[pos1.getRow()][pos1.getColumn()].getTimesMoved()
@@ -568,6 +581,7 @@ public class Board1 implements Board {
         if (this.kingInCheck(color)) {
             Piece formerPiece = new Piece1(newPiece.getColor(), Piece.Type.PAWN,
                     pos1);
+            formerPiece.setTimesMoved(originalTimesMoved);
             this.board[pos1.getRow()][pos1.getColumn()] = formerPiece;
             this.board[pos2.getRow()][pos2.getColumn()] = pieceReplaced;
             this.piecesMoved--;
@@ -590,6 +604,10 @@ public class Board1 implements Board {
             kPos2 = new Position(0, 6);
             rPos2 = new Position(0, 5);
         }
+        int originalKingMoved = this.board[kPos1.getRow()][kPos1.getColumn()]
+                .getTimesMoved();
+        int originalRookMoved = this.board[rPos1.getRow()][rPos1.getColumn()]
+                .getTimesMoved();
         Piece newKing = new Piece1(color, Piece.Type.KING, kPos2);
         newKing.setTimesMoved(
                 this.board[kPos1.getRow()][kPos1.getColumn()].getTimesMoved()
@@ -606,9 +624,11 @@ public class Board1 implements Board {
         this.updateLineOfSights();
         if (this.kingInCheck(color)) {
             Piece formerKing = new Piece1(color, Piece.Type.KING, kPos1);
+            formerKing.setTimesMoved(originalKingMoved);
             this.board[kPos1.getRow()][kPos1.getColumn()] = formerKing;
             this.board[kPos2.getRow()][kPos2.getColumn()] = null;
             Piece formerRook = new Piece1(color, Piece.Type.ROOK, rPos1);
+            formerRook.setTimesMoved(originalRookMoved);
             this.board[rPos1.getRow()][rPos1.getColumn()] = formerRook;
             this.board[rPos2.getRow()][rPos2.getColumn()] = null;
             this.piecesMoved--;
@@ -630,6 +650,10 @@ public class Board1 implements Board {
             kPos2 = new Position(0, 2);
             rPos2 = new Position(0, 3);
         }
+        int originalKingMoved = this.board[kPos1.getRow()][kPos1.getColumn()]
+                .getTimesMoved();
+        int originalRookMoved = this.board[rPos1.getRow()][rPos1.getColumn()]
+                .getTimesMoved();
         Piece newKing = new Piece1(color, Piece.Type.KING, kPos2);
         newKing.setTimesMoved(
                 this.board[kPos1.getRow()][kPos1.getColumn()].getTimesMoved()
@@ -646,9 +670,11 @@ public class Board1 implements Board {
         this.updateLineOfSights();
         if (this.kingInCheck(color)) {
             Piece formerKing = new Piece1(color, Piece.Type.KING, kPos1);
+            formerKing.setTimesMoved(originalKingMoved);
             this.board[kPos1.getRow()][kPos1.getColumn()] = formerKing;
             this.board[kPos2.getRow()][kPos2.getColumn()] = null;
             Piece formerRook = new Piece1(color, Piece.Type.ROOK, rPos1);
+            formerRook.setTimesMoved(originalRookMoved);
             this.board[rPos1.getRow()][rPos1.getColumn()] = formerRook;
             this.board[rPos2.getRow()][rPos2.getColumn()] = null;
             this.piecesMoved--;
@@ -661,6 +687,8 @@ public class Board1 implements Board {
     @Override
     public Piece enpassant(Position pos1, Position pos2, Color color,
             boolean ignoreKingInCheck) throws KingInCheckException {
+        int originalTimesMoved = this.board[pos1.getRow()][pos1.getColumn()]
+                .getTimesMoved();
         Piece newPiece = new Piece1(
                 this.board[pos1.getRow()][pos1.getColumn()].getColor(),
                 Piece.Type.PAWN, pos2);
@@ -694,6 +722,7 @@ public class Board1 implements Board {
              */
             Piece formerPiece = new Piece1(newPiece.getColor(),
                     newPiece.getType(), pos1);
+            formerPiece.setTimesMoved(originalTimesMoved);
             this.board[pos1.getRow()][pos1.getColumn()] = formerPiece;
             this.board[pos2.getRow() + backwards][pos2
                     .getColumn()] = pieceReplaced;
@@ -795,5 +824,20 @@ public class Board1 implements Board {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Piece[][] copy() {
+        Piece[][] copy = new Piece[8][8];
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (this.board[i][j] != null) {
+                    copy[i][j] = new Piece1(this.board[i][j].getColor(),
+                            this.board[i][j].getType(),
+                            this.board[i][j].getPosition());
+                }
+            }
+        }
+        return copy;
     }
 }

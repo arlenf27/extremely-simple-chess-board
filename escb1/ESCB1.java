@@ -278,7 +278,7 @@ public class ESCB1 {
              * it is guaranteed to be a pawn capture. The string is also
              * guaranteed to be of length 4 (ex: fxg4).
              */
-            if (s.charAt(0) >= 97 && s.charAt(0) <= 104) {
+            if (s.charAt(0) >= 97 && s.charAt(0) <= 104 && s.length() == 4) {
                 int finalRow = 8 - Character.getNumericValue(s.charAt(3));
                 int finalColumn = s.charAt(2) - 97;
                 int initialColumn = s.charAt(0) - 97;
@@ -389,6 +389,10 @@ public class ESCB1 {
             } else {
                 listOfErrors.add("Unable to Castle");
             }
+            /*
+             * TODO Long Castling for Black somehow never works, but it works
+             * for White
+             */
         } else if (s.equals("0-0-0")) {
             int row = 7;
             if (color == Piece.Color.BLACK) {
@@ -460,7 +464,7 @@ public class ESCB1 {
          */
         Board newBoard = new Board1();
         System.out.println(
-                "An extremely simple chess board that takes input in the form of Standard Algebraic Notation (SAN). It is important to note that \n\t1) This program does not accept the letter 'P' as an initial for pawn moves; in these cases, the 'P' is ommitted\n\t2) This program does not accept 'e.p' as part of an annotation; it will auto-recognize the validity of en passant moves\n\t3) This program does not allow the presence of additional annotations on the quality of moves (such as '!' or '!!' or '?!')\n\t4) The symbol '#' is used for checkmates instead of '++'\n\t5) Unfortunately, I am not completely familiar with SAN; I have tried my best to make sure all possible inputs are accounted for, but I could have misunderstood a few things about the notation\n\t6) If an invalid input was given, then the program will prompt for the input again\n\t7) It is completely UNNECESSARY to include '+' or '#' as part of a move for checks or checkmates; however, if one chooses to include either character, then the move MUST be either a check or a checkmate\n\t8) Draw by Repitition is not yet implemented\n\t9) Draw by Agreement is not yet implemented\n\t10) Resignation is not yet implemented");
+                "An extremely simple chess board that takes input in the form of Standard Algebraic Notation (SAN). It is important to note that \n\t1) This program does not accept the letter 'P' as an initial for pawn moves; in these cases, the 'P' is ommitted\n\t2) This program does not accept 'e.p' as part of an annotation; it will auto-recognize the validity of en passant moves\n\t3) This program does not allow the presence of additional annotations on the quality of moves (such as '!' or '!!' or '?!')\n\t4) The symbol '#' is used for checkmates instead of '++'\n\t5) Unfortunately, I am not completely familiar with SAN; I have tried my best to make sure all possible inputs are accounted for, but I could have misunderstood a few things about the notation\n\t6) If an invalid input was given, then the program will prompt for the input again\n\t7) It is completely UNNECESSARY to include '+' or '#' as part of a move for checks or checkmates; however, if one chooses to include either character, then the move MUST be either a check or a checkmate\n\t8) Castling notation is represented by zeroes, not 'O'\n\t9) Draw by Agreement is not yet implemented\n\t10) Resignation is not yet implemented");
         System.out.println("Initial State: Move: " + newBoard.getMove()
                 + ", Board: \n\n" + newBoard.toStringTable());
         /*
@@ -469,6 +473,8 @@ public class ESCB1 {
         int count = 0;
         String lastMove = "";
         ArrayList<String> allMoves = new ArrayList<String>();
+        MapForPieceMatrices allPositions = new MapForPieceMatrices();
+        allPositions.put(newBoard.copy(), 1);
         /*
          * Takes user input (only accepts Algebraic Notation).
          */
@@ -559,6 +565,12 @@ public class ESCB1 {
                             }
                             newBoard.setPiecesMoved(
                                     newBoard.getPiecesMoved() - 2);
+                            newBoard.getBoardAsArray()[pos1.getRow()][pos1
+                                    .getColumn()].setTimesMoved(
+                                            newBoard.getBoardAsArray()[pos1
+                                                    .getRow()][pos1.getColumn()]
+                                                            .getTimesMoved()
+                                                    - 2);
                         } else if (special.contains("enpassant")) {
                             newBoard.updateState(pos2, pos1, currentColor,
                                     true);
@@ -569,6 +581,12 @@ public class ESCB1 {
                             }
                             newBoard.setPiecesMoved(
                                     newBoard.getPiecesMoved() - 2);
+                            newBoard.getBoardAsArray()[pos1.getRow()][pos1
+                                    .getColumn()].setTimesMoved(
+                                            newBoard.getBoardAsArray()[pos1
+                                                    .getRow()][pos1.getColumn()]
+                                                            .getTimesMoved()
+                                                    - 2);
                         } else if (special.contains("shortcastle")) {
                             newBoard.updateState(new Position(row, 6),
                                     new Position(row, 4), currentColor, true);
@@ -576,6 +594,12 @@ public class ESCB1 {
                                     new Position(row, 7), currentColor, true);
                             newBoard.setPiecesMoved(
                                     newBoard.getPiecesMoved() - 3);
+                            newBoard.getBoardAsArray()[row][4].setTimesMoved(
+                                    newBoard.getBoardAsArray()[row][4]
+                                            .getTimesMoved() - 2);
+                            newBoard.getBoardAsArray()[row][7].setTimesMoved(
+                                    newBoard.getBoardAsArray()[row][7]
+                                            .getTimesMoved() - 2);
                         } else if (special.contains("longcastle")) {
                             newBoard.updateState(new Position(row, 2),
                                     new Position(row, 4), currentColor, true);
@@ -583,6 +607,12 @@ public class ESCB1 {
                                     new Position(row, 0), currentColor, true);
                             newBoard.setPiecesMoved(
                                     newBoard.getPiecesMoved() - 3);
+                            newBoard.getBoardAsArray()[row][4].setTimesMoved(
+                                    newBoard.getBoardAsArray()[row][4]
+                                            .getTimesMoved() - 2);
+                            newBoard.getBoardAsArray()[row][0].setTimesMoved(
+                                    newBoard.getBoardAsArray()[row][0]
+                                            .getTimesMoved() - 2);
                         } else if (special.contains("promote")) {
                             newBoard.getBoardAsArray()[pos1.getRow()][pos1
                                     .getColumn()] = new Piece1(currentColor,
@@ -617,6 +647,12 @@ public class ESCB1 {
                             }
                             newBoard.setPiecesMoved(
                                     newBoard.getPiecesMoved() - 2);
+                            newBoard.getBoardAsArray()[pos1.getRow()][pos1
+                                    .getColumn()].setTimesMoved(
+                                            newBoard.getBoardAsArray()[pos1
+                                                    .getRow()][pos1.getColumn()]
+                                                            .getTimesMoved()
+                                                    - 2);
                         } else if (special.contains("enpassant")) {
                             newBoard.updateState(pos2, pos1, currentColor,
                                     true);
@@ -627,6 +663,12 @@ public class ESCB1 {
                             }
                             newBoard.setPiecesMoved(
                                     newBoard.getPiecesMoved() - 2);
+                            newBoard.getBoardAsArray()[pos1.getRow()][pos1
+                                    .getColumn()].setTimesMoved(
+                                            newBoard.getBoardAsArray()[pos1
+                                                    .getRow()][pos1.getColumn()]
+                                                            .getTimesMoved()
+                                                    - 2);
                         } else if (special.contains("shortcastle")) {
                             newBoard.updateState(new Position(row, 6),
                                     new Position(row, 4), currentColor, true);
@@ -634,6 +676,12 @@ public class ESCB1 {
                                     new Position(row, 7), currentColor, true);
                             newBoard.setPiecesMoved(
                                     newBoard.getPiecesMoved() - 3);
+                            newBoard.getBoardAsArray()[row][4].setTimesMoved(
+                                    newBoard.getBoardAsArray()[row][4]
+                                            .getTimesMoved() - 2);
+                            newBoard.getBoardAsArray()[row][7].setTimesMoved(
+                                    newBoard.getBoardAsArray()[row][7]
+                                            .getTimesMoved() - 2);
                         } else if (special.contains("longcastle")) {
                             newBoard.updateState(new Position(row, 2),
                                     new Position(row, 4), currentColor, true);
@@ -641,6 +689,12 @@ public class ESCB1 {
                                     new Position(row, 0), currentColor, true);
                             newBoard.setPiecesMoved(
                                     newBoard.getPiecesMoved() - 3);
+                            newBoard.getBoardAsArray()[row][4].setTimesMoved(
+                                    newBoard.getBoardAsArray()[row][4]
+                                            .getTimesMoved() - 2);
+                            newBoard.getBoardAsArray()[row][0].setTimesMoved(
+                                    newBoard.getBoardAsArray()[row][0]
+                                            .getTimesMoved() - 2);
                         } else if (special.contains("promote")) {
                             newBoard.getBoardAsArray()[pos1.getRow()][pos1
                                     .getColumn()] = new Piece1(currentColor,
@@ -690,6 +744,14 @@ public class ESCB1 {
                             + ", Board: \n\n" + newBoard.toStringTable());
                     System.exit(0);
                 }
+                if (allPositions.containsKey(newBoard.copy())
+                        && allPositions.get(newBoard.copy()) == 2) {
+                    System.out.println("Draw by Repetition. ");
+                    System.out.println("Move: "
+                            + ((newBoard.getPiecesMoved() - 1) / 2 + 1)
+                            + ", Board: \n\n" + newBoard.toStringTable());
+                    System.exit(0);
+                }
                 boolean fiftyMoveRule = true;
                 if (allMoves.size() >= 99 && !s.contains("x")
                         && !(s.charAt(0) >= 97 && s.charAt(0) <= 104)) {
@@ -712,6 +774,12 @@ public class ESCB1 {
                     System.exit(0);
                 }
                 if (!illegal) {
+                    if (allPositions.containsKey(newBoard.copy())) {
+                        allPositions.put(newBoard.copy(),
+                                allPositions.get(newBoard.copy()) + 1);
+                    } else {
+                        allPositions.put(newBoard.copy(), 1);
+                    }
                     System.out.println("Current State: Move: "
                             + newBoard.getMove() + ", Board: \n\n"
                             + newBoard.toStringTable());

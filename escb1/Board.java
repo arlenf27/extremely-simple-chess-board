@@ -96,6 +96,13 @@ public interface Board {
     Piece[][] getBoardAsArray();
 
     /**
+     * Gets the board as a COPY of a 2-D array.
+     *
+     * @return an array COPY representing the board
+     */
+    Piece[][] copy();
+
+    /**
      * Gets the current move;
      *
      * @return the current move

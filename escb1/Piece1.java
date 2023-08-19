@@ -97,4 +97,35 @@ public class Piece1 implements Piece {
     public void clearLineOfSight() {
         this.lineOfSight.clear();
     }
+
+    /**
+     * Should only be used to check whether a board's position at a particular
+     * point in time is equal to another position through the
+     * Arrays.deepEquals() method; does not take into account line of sight or
+     * the times moved; only compares type, color, and position.
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof Piece)) {
+            return false;
+        }
+        Piece p = (Piece) obj;
+        if (this.getType() != p.getType()) {
+            return false;
+        }
+        if (this.getColor() != p.getColor()) {
+            return false;
+        }
+        if (this.getPosition().getRow() != p.getPosition().getRow() || this
+                .getPosition().getColumn() != p.getPosition().getColumn()) {
+            return false;
+        }
+        return true;
+    }
 }
