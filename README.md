@@ -24,3 +24,5 @@ In Development:
 4) Run the ESCB1.class file through the escb1 directory: `java escb1.ESCB1`
 ### Alternative Method
 1) After navigating to the aforementioned directory, run the executable .jar file: `java -jar ExtremelySimpleChessBoard.jar`
+## Important Note 
+1) When running the program, ***MAKE SURE THAT THE TERMINAL OR COMMAND PROMPT WINDOW IS IN FULLSCREEN***. If the window is too small, the table representing the chess board will not print correctly (make sure that each row of the chess board fits on one line)
