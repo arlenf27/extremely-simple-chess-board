@@ -6,8 +6,6 @@
 ## Status
 In Development: 
  - Still undergoing testing, may contain errors
- - Draw by agreement not implemented
- - Resignation not implemented
 ## Operation Notes
 1) This program does not accept the letter 'P' as an initial for pawn moves; in these cases, the 'P' is ommitted
 2) This program does not accept 'e.p' as part of an annotation; it will auto-recognize the validity of en passant moves
@@ -17,6 +15,8 @@ In Development:
 6) If an invalid input was given, then the program will prompt for the input again
 7) It is completely UNNECESSARY to include '+' or '#' as part of a move for checks or checkmates; however, if one chooses to include either character, then the move MUST be either a check or a checkmate
 8) Castling notation is represented by ZEROES, not 'O' (Ex: '0-0-0', NOT 'O-O-O')
+9) Append 'OFFERDRAW' to the end of an input (no spaces; ex: 'Bxg4OFFERDRAW') to offer a draw and type 'ACCEPTDRAW' to accept a draw offer
+10) To resign, enter 'RESIGN' when prompted for a move
 ## Running the Program
 1) Check that a recent version of JDK is installed (Recommended Minimum Version: JDK 17.0.7): `java -version`
 2) Unzip the downloaded file

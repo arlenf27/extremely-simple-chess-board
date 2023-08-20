@@ -464,7 +464,7 @@ public class ESCB1 {
          */
         Board newBoard = new Board1();
         System.out.println(
-                "An extremely simple chess board that takes input in the form of Standard Algebraic Notation (SAN). It is important to note that \n\t1) This program does not accept the letter 'P' as an initial for pawn moves; in these cases, the 'P' is ommitted\n\t2) This program does not accept 'e.p' as part of an annotation; it will auto-recognize the validity of en passant moves\n\t3) This program does not allow the presence of additional annotations on the quality of moves (such as '!' or '!!' or '?!')\n\t4) The symbol '#' is used for checkmates instead of '++'\n\t5) Unfortunately, I am not completely familiar with SAN; I have tried my best to make sure all possible inputs are accounted for, but I could have misunderstood a few things about the notation\n\t6) If an invalid input was given, then the program will prompt for the input again\n\t7) It is completely UNNECESSARY to include '+' or '#' as part of a move for checks or checkmates; however, if one chooses to include either character, then the move MUST be either a check or a checkmate\n\t8) Castling notation is represented by zeroes, not 'O'\n\t9) Draw by Agreement is not yet implemented\n\t10) Resignation is not yet implemented");
+                "An extremely simple chess board that takes input in the form of Standard Algebraic Notation (SAN). It is important to note that \n\t1) This program does not accept the letter 'P' as an initial for pawn moves; in these cases, the 'P' is ommitted\n\t2) This program does not accept 'e.p' as part of an annotation; it will auto-recognize the validity of en passant moves\n\t3) This program does not allow the presence of additional annotations on the quality of moves (such as '!' or '!!' or '?!')\n\t4) The symbol '#' is used for checkmates instead of '++'\n\t5) Unfortunately, I am not completely familiar with SAN; I have tried my best to make sure all possible inputs are accounted for, but I could have misunderstood a few things about the notation\n\t6) If an invalid input was given, then the program will prompt for the input again\n\t7) It is completely UNNECESSARY to include '+' or '#' as part of a move for checks or checkmates; however, if one chooses to include either character, then the move MUST be either a check or a checkmate\n\t8) Castling notation is represented by zeroes, not 'O'\n\t9) Append 'OFFERDRAW' to the end of an input (no spaces; ex: 'Bxg4OFFERDRAW') to offer a draw and type 'ACCEPTDRAW' to accept a draw offer\n\t10) To resign, enter 'RESIGN' when prompted for a move");
         System.out.println("Initial State: Move: " + newBoard.getMove()
                 + ", Board: \n\n" + newBoard.toStringTable());
         /*
@@ -475,6 +475,7 @@ public class ESCB1 {
         ArrayList<String> allMoves = new ArrayList<String>();
         MapForPieceMatrices allPositions = new MapForPieceMatrices();
         allPositions.put(newBoard.copy(), 1);
+        boolean drawOffered = false;
         /*
          * Takes user input (only accepts Algebraic Notation).
          */
@@ -510,6 +511,29 @@ public class ESCB1 {
             } else {
                 currentColor = Piece.Color.BLACK;
             }
+            Piece.Color oppositeColor = Piece.Color.WHITE;
+            if (currentColor == Piece.Color.WHITE) {
+                oppositeColor = Piece.Color.BLACK;
+            }
+            String drawOfferStatement = "";
+            String drawOfferedFalseIllegal = "";
+            if (s.equals("RESIGN")) {
+                System.out.println(currentColor + " Resigned. " + oppositeColor
+                        + " wins. ");
+                System.out.println("Move: " + newBoard.getMove()
+                        + ", Board: \n\n" + newBoard.toStringTable());
+                System.exit(0);
+            } else if (!drawOffered && s.contains("OFFERDRAW")) {
+                drawOfferStatement = currentColor + " offered a draw. ";
+                s = s.substring(0, s.indexOf("OFFERDRAW"));
+            } else if (drawOffered && s.equals("ACCEPTDRAW")) {
+                System.out.println("Draw by Agreement. ");
+                System.out.println("Move: " + newBoard.getMove()
+                        + ", Board: \n\n" + newBoard.toStringTable());
+                System.exit(0);
+            } else if (drawOffered && !s.equals("ACCEPTDRAW")) {
+                drawOfferedFalseIllegal = "False";
+            }
             String special = parseInput(newBoard, currentColor, listOfErrors, s,
                     pos1, pos2, null, null, false, false, lastMove);
             Piece pieceTaken = null;
@@ -539,10 +563,6 @@ public class ESCB1 {
                         pieceTaken = newBoard.promote(pos1, pos2,
                                 Piece.Type.KNIGHT, currentColor);
                     }
-                }
-                Piece.Color oppositeColor = Piece.Color.WHITE;
-                if (currentColor == Piece.Color.WHITE) {
-                    oppositeColor = Piece.Color.BLACK;
                 }
                 int squaresToMoveBack = 1;
                 if (currentColor == Piece.Color.BLACK) {
@@ -786,6 +806,13 @@ public class ESCB1 {
                     count++;
                     lastMove = s;
                     allMoves.add(0, s);
+                    if (!drawOfferStatement.equals("")) {
+                        System.out.println(drawOfferStatement);
+                        drawOffered = true;
+                    }
+                    if (!drawOfferedFalseIllegal.equals("")) {
+                        drawOffered = false;
+                    }
                 }
             } catch (IndexOutOfBoundsException e) {
                 if (listOfErrors.size() == 0) {
