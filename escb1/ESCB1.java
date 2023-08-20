@@ -742,58 +742,58 @@ public class ESCB1 {
                  * Checks for checkmate, stalemate, and draw by insufficient
                  * material
                  */
-                if (newBoard.checkmateOrStalemate(oppositeColor, true,
-                        lastMove)) {
-                    System.out
-                            .println("Checkmate, " + currentColor + " wins. ");
-                    System.out.println("Move: "
-                            + ((newBoard.getPiecesMoved() - 1) / 2 + 1)
-                            + ", Board: \n\n" + newBoard.toStringTable());
-                    System.exit(0);
-                } else if (newBoard.checkmateOrStalemate(oppositeColor, false,
-                        lastMove)) {
-                    System.out.println("Stalemate, Draw. ");
-                    System.out.println("Move: "
-                            + ((newBoard.getPiecesMoved() - 1) / 2 + 1)
-                            + ", Board: \n\n" + newBoard.toStringTable());
-                    System.exit(0);
-                } else if (newBoard.insufficientMaterialDraw()) {
-                    System.out.println("Insufficient Material, Draw. ");
-                    System.out.println("Move: "
-                            + ((newBoard.getPiecesMoved() - 1) / 2 + 1)
-                            + ", Board: \n\n" + newBoard.toStringTable());
-                    System.exit(0);
-                }
-                if (allPositions.containsKey(newBoard.copy())
-                        && allPositions.get(newBoard.copy()) == 2) {
-                    System.out.println("Draw by Repetition. ");
-                    System.out.println("Move: "
-                            + ((newBoard.getPiecesMoved() - 1) / 2 + 1)
-                            + ", Board: \n\n" + newBoard.toStringTable());
-                    System.exit(0);
-                }
-                boolean fiftyMoveRule = true;
-                if (allMoves.size() >= 99 && !s.contains("x")
-                        && !(s.charAt(0) >= 97 && s.charAt(0) <= 104)) {
-                    for (int i = 0; i < 99; i++) {
-                        if (allMoves.get(i).contains("x")
-                                || (allMoves.get(i).charAt(0) >= 97
-                                        && allMoves.get(i).charAt(0) <= 104)) {
-                            fiftyMoveRule = false;
-                            break;
-                        }
-                    }
-                } else {
-                    fiftyMoveRule = false;
-                }
-                if (fiftyMoveRule) {
-                    System.out.println("50-Move Rule, Draw. ");
-                    System.out.println("Move: "
-                            + ((newBoard.getPiecesMoved() - 1) / 2 + 1)
-                            + ", Board: \n\n" + newBoard.toStringTable());
-                    System.exit(0);
-                }
                 if (!illegal) {
+                    if (newBoard.checkmateOrStalemate(oppositeColor, true,
+                            lastMove)) {
+                        System.out.println(
+                                "Checkmate, " + currentColor + " wins. ");
+                        System.out.println("Move: "
+                                + ((newBoard.getPiecesMoved() - 1) / 2 + 1)
+                                + ", Board: \n\n" + newBoard.toStringTable());
+                        System.exit(0);
+                    } else if (newBoard.checkmateOrStalemate(oppositeColor,
+                            false, lastMove)) {
+                        System.out.println("Stalemate, Draw. ");
+                        System.out.println("Move: "
+                                + ((newBoard.getPiecesMoved() - 1) / 2 + 1)
+                                + ", Board: \n\n" + newBoard.toStringTable());
+                        System.exit(0);
+                    } else if (newBoard.insufficientMaterialDraw()) {
+                        System.out.println("Insufficient Material, Draw. ");
+                        System.out.println("Move: "
+                                + ((newBoard.getPiecesMoved() - 1) / 2 + 1)
+                                + ", Board: \n\n" + newBoard.toStringTable());
+                        System.exit(0);
+                    }
+                    if (allPositions.containsKey(newBoard.copy())
+                            && allPositions.get(newBoard.copy()) == 2) {
+                        System.out.println("Draw by Repetition. ");
+                        System.out.println("Move: "
+                                + ((newBoard.getPiecesMoved() - 1) / 2 + 1)
+                                + ", Board: \n\n" + newBoard.toStringTable());
+                        System.exit(0);
+                    }
+                    boolean fiftyMoveRule = true;
+                    if (allMoves.size() >= 99 && !s.contains("x")
+                            && !(s.charAt(0) >= 97 && s.charAt(0) <= 104)) {
+                        for (int i = 0; i < 99; i++) {
+                            if (allMoves.get(i).contains("x") || (allMoves
+                                    .get(i).charAt(0) >= 97
+                                    && allMoves.get(i).charAt(0) <= 104)) {
+                                fiftyMoveRule = false;
+                                break;
+                            }
+                        }
+                    } else {
+                        fiftyMoveRule = false;
+                    }
+                    if (fiftyMoveRule) {
+                        System.out.println("50-Move Rule, Draw. ");
+                        System.out.println("Move: "
+                                + ((newBoard.getPiecesMoved() - 1) / 2 + 1)
+                                + ", Board: \n\n" + newBoard.toStringTable());
+                        System.exit(0);
+                    }
                     if (allPositions.containsKey(newBoard.copy())) {
                         allPositions.put(newBoard.copy(),
                                 allPositions.get(newBoard.copy()) + 1);
